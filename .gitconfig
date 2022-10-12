@@ -1,2 +1,14 @@
 [user]
 	name = DanielGreth
+   email = dgsoerensen@protonmail.com
+[core]
+   editor = vim
+[diff]
+   tool = vimdiff
+[merge]
+   tool = vimdiff
+   conflictstyle = diff3
+[difftool]
+   prompt = false
+[mergetool]
+   prompt = false

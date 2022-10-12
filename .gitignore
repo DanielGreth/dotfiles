@@ -30,7 +30,7 @@ dmenu
 
 # vim stuff
 .viminfo
-.vim/.netrwhist
+.vim/
 
 
 # ignore bash stuff since it is not used TODO: remove bash stuff

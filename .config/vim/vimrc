@@ -1,9 +1,9 @@
-" Set compatible mode, this is off by default if a vimrcfile is present,
-" however, if this is file is loaded with the -u flag, it needs to be
-" explicitly set
+" Set compatible mode to off, which pathogen needs
 set nocompatible
 
 "
+set rtp+=$XDG_CONFIG_HOME/vim/bundle/*
+source $XDG_CONFIG_HOME/vim/autoload/pathogen.vim
 execute pathogen#infect()
 syntax on
 filetype plugin indent on
@@ -19,9 +19,6 @@ set expandtab
 set splitright
 set splitbelow
 
-" Show line number
-set number
-
 
 """""""""""""""""""
 " Search 
@@ -32,6 +29,12 @@ set hlsearch
 " Highlight all patern matches WHILE typing the pattern
 set incsearch
 
+" Ignore capital letters when searching
+set ignorecase
+
+" Override ignorecase, when specifically searching for capitalized letters
+set smartcase
+
 
 """""""""""""""""""
 " Mix
@@ -40,14 +43,62 @@ set incsearch
 set showmatch
 
 " Highlight current line
-set cursorline
+"set cursorline
 
+" Show line number
+set number
+
+" Do not let cursor scroll below or above N lines when scrolling
+set scrolloff=10
+
+" Do not wrap lines
+set nowrap
+
+" Enable TAB compleation in menu
+set wildmenu
 
 
 """""""""""""""""""""""""""""""""""
 " PLUGINS
 """""""""""""""""""""""""""""""""""
 
+"""""""""""""""""""""""""""""""""""""""""""
 " LIGHTLINE
 " https://github.com/itchyny/lightline.vim
+"""""""""""""""""""""""""""""""""""""""""""
+set laststatus=2	" Actually adds / shows lightline at the bottom
+set noshowmode
+
+let g:lightline = {
+   \ 'colorscheme': 'wombat',
+	\ 'active': {
+	\   'left': [ [ 'mode', 'paste' ],
+	\             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
+	\   'right': [ [ 'lineinfo' ],
+	\              [ 'percent' ],
+	\              [ 'fileformat', 'fileencoding', 'filetype', 'charvaluehex' ] ]
+	\ },
+   \ 'component': {
+   \   'gitbranch': '%{exists("*FugitiveHead")?FugitiveHead():""}',
+   \   'readonly': '%{&filetype=="help"?"":&readonly?"RO":""}',
+   \   'modified': '%{&filetype=="help"?"":&modified?"+":&modifiable?"":"-"}',
+   \   'charvaluehex': '0x%B'
+   \ },
+   \ 'component_visible_condition': {
+   \   'gitbranch': '(exists("*FugitiveHead") && ""!=FugitiveHead())',
+   \   'readonly': '(&filetype!="help" && &readonly)',
+   \   'modified': '(&filetype!="help" && (&modified || !&modifiable))'
+   \ },
+   \ 'seperator': { 'left': ' ', 'right': ' '  },
+   \ 'subseperator': { 'left': ' ', 'right': ' ' }
+   \ }
+
+
+"
+"COLOR
+"
+set termguicolors
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+let g:Hexokinase_highlighters = [ 'backgroundfull' ]
 
