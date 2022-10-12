@@ -1,0 +1,42 @@
+# generally ignored
+*.tar.gz
+*.pkg.tar.zst
+*.zwc
+*.zwc.old
+
+# ignore files created when compiling / patching suckless software
+*.orig
+*.rej
+*.o
+dwm
+st
+dmenu
+
+# ignore .cache, no reason to track anything in that dir
+.cache/
+
+# ignored things in .local TODO: find out which items that needs to be ignored and which that doesn't
+.local/* # TODO: change later
+.local/share/
+.local/src/
+#.local/src/aur/*/*
+#!.local/src/aur/*/PKGBUILD TODO:
+
+# ignore ssh dir, not exactly the type of files that need to be accessible from the internet
+.ssh/
+
+# ignore firefox files since not setup yet
+.mozilla/
+
+# vim stuff
+.viminfo
+.vim/.netrwhist
+
+
+# ignore bash stuff since it is not used TODO: remove bash stuff
+.bash_history
+.bash_logout
+.bash_profile
+.bashrc
+
+

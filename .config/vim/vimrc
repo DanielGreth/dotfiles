@@ -1,0 +1,53 @@
+" Set compatible mode, this is off by default if a vimrcfile is present,
+" however, if this is file is loaded with the -u flag, it needs to be
+" explicitly set
+set nocompatible
+
+"
+execute pathogen#infect()
+syntax on
+filetype plugin indent on
+
+
+" Convert tabs to spaces and set tabspaces to 3
+set smartindent
+set tabstop=3
+set shiftwidth=3
+set expandtab
+
+" Intuitive window splitting
+set splitright
+set splitbelow
+
+" Show line number
+set number
+
+
+"""""""""""""""""""
+" Search 
+"""""""""""""""""""
+" Highlight search result (after pressing enter)
+set hlsearch
+
+" Highlight all patern matches WHILE typing the pattern
+set incsearch
+
+
+"""""""""""""""""""
+" Mix
+"""""""""""""""""""
+" Show matching brackets
+set showmatch
+
+" Highlight current line
+set cursorline
+
+
+
+"""""""""""""""""""""""""""""""""""
+" PLUGINS
+"""""""""""""""""""""""""""""""""""
+
+" LIGHTLINE
+" https://github.com/itchyny/lightline.vim
+

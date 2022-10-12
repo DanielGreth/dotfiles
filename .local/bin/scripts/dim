@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Script used to lower the screen brightness before going idle
+# Uses dunstify (notification manager / daemon) to only show one notification for "continuous" increase/decrease in brightness (i.e. when holding a keybinding)
+
+# Change this according to the system running this
+cbr=$(($(cat /sys/class/backlight/intel_backlight/brightness)/75))
+msgID="192838"
+[ "$cbr" -gt 50 ] && dimbr=$((cbr-30)) || dimbr=$((cbr/2))
+
+# trap script to "de-idle" upon keypress or mouse movement and restore previous brightness
+trap 'exit 0' TERM INT
+trap 'br set $cbr; kill %%; dunstify -C 192838' EXIT
+
+dunstify -r "$msgID" ' Dimming screen, locking in 60 seconds...' && br set $dimbr
+
+# 2^31 - 1
+sleep 2147483647 &
+wait

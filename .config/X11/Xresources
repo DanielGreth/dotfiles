@@ -1,0 +1,17 @@
+#include "Xresources.d/gruvbox"
+
+
+!! St
+st.aplha: 0.8
+st.alphaOffset: 0.1
+st.bellvolume: 0
+st.blinktimeout:666
+
+!! Appearance
+Xft.antialias: 1
+Xft.hinting: 1
+Xft.rgba: rgb
+Xft.autohint: 0
+Xft.hintstyle: hintslight
+Xft.lcdfilter: lcddefault
+*.scrollbar: 0

@@ -1,0 +1,28 @@
+#!/bin/sh
+
+# Dim->LockScreen->Suspend
+	# Dim the screen after 180 seconds of inactivity
+	xset s 180 60
+	# Lock the screen after another 60 seconds of inactivity using slock
+	xss-lock -n "/home/greth/.local/bin/scripts/dim" -- /usr/local/bin/slock &
+	# Suspends pc after 600 seconds, but not if an appication is in fullscreen or audio is playing
+	xidlehook --not-when-fullscreen --not-when-audio --timer 600 "systemctl suspend" - &
+
+	_() { # Used to start daemons which have not been started yet
+		pgrep -x "$1" >/dev/null ||
+			{ "$@" & }
+	}
+
+	xsetroot -cursor_name left_ptr # Needed because of hsetroot
+	mon -e
+	[ -f "$XDG_CONFIG_HOME/X11/Xresources" ] && xrdb -load ~/.config/X11/Xresources
+	if [ -f "$XDG_DATA_HOME/bg" ]; then # Check if there is an active wallpaper
+		[ -f "$XDG_CACHE_HOME/wal/active" ] && wal -R || sbg # Dirty trick to check if pywal was on at shutdown
+	else
+		hsetroot -solid "$(cat $XDG_CACHE_HOME/bgcol)"
+	fi
+
+	_ dunst				# Notification daemon
+	togcomp -y			# Compositor (picom)
+	xdotool mousemove 1000 700	# Position cursor at approx the center of the screen
+	_ redshift			# Ajust the color temeprature of the screen depending on time of day
