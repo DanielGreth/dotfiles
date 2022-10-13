@@ -9,78 +9,85 @@ syntax on
 filetype plugin indent on
 
 
+"""""""""""""""""""
+" General settings
+"""""""""""""""""""
+set showmatch    " Show matching brackets
+set number       " Show line number
+set scrolloff=10 " Do not let cursor scroll below or above N lines when scrolling
+set nowrap       " Do not wrap lines
+set wildmenu     " Enable TAB compleation in menu
+set wildignore+=.git,.hg,.svn
+set wildignore+=*.aux,*.out,*.toc
+set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest,*.rbc,*.class
+set wildignore+=*.ai,*.bmp,*.gif,*.ico,*.jpg,*.jpeg,*.png,*.psd,*.webp
+set wildignore+=*.avi,*.divx,*.mp4,*.webm,*.mov,*.m2ts,*.mkv,*.vob,*.mpg,*.mpeg
+set wildignore+=*.mp3,*.oga,*.ogg,*.wav,*.flac
+set wildignore+=*.eot,*.otf,*.ttf,*.woff
+set wildignore+=*.doc,*.pdf,*.cbr,*.cbz
+set wildignore+=*.zip,*.tar.gz,*.tar.bz2,*.rar,*.tar.xz,*.kgb
+set wildignore+=*.swp,.lock,.DS_Store,._*
+set wildmode=longest:full,list,full
+set wildignorecase
+
+" Intuitive window splitting
+set splitright
+set splitbelow
+
 " Convert tabs to spaces and set tabspaces to 3
 set smartindent
 set tabstop=3
 set shiftwidth=3
 set expandtab
 
-" Intuitive window splitting
-set splitright
-set splitbelow
+set hlsearch     " Highlight search result (after pressing enter)
+set incsearch    " Highlight all patern matches WHILE typing the pattern
+set ignorecase   " Ignore capital letters when searching
+set smartcase    " Override ignorecase, when specifically searching for capitalized letters
 
 
-"""""""""""""""""""
-" Search 
-"""""""""""""""""""
-" Highlight search result (after pressing enter)
-set hlsearch
-
-" Highlight all patern matches WHILE typing the pattern
-set incsearch
-
-" Ignore capital letters when searching
-set ignorecase
-
-" Override ignorecase, when specifically searching for capitalized letters
-set smartcase
-
-
-"""""""""""""""""""
-" Mix
-"""""""""""""""""""
-" Show matching brackets
-set showmatch
-
-" Highlight current line
-"set cursorline
-
-" Show line number
-set number
-
-" Do not let cursor scroll below or above N lines when scrolling
-set scrolloff=10
-
-" Do not wrap lines
-set nowrap
-
-" Enable TAB compleation in menu
-set wildmenu
 
 
 """""""""""""""""""""""""""""""""""
 " PLUGINS
 """""""""""""""""""""""""""""""""""
 
-"""""""""""""""""""""""""""""""""""""""""""
-" LIGHTLINE
-" https://github.com/itchyny/lightline.vim
-"""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"           LIGHTLINE and BUFFERLINE                   "
+" https://github.com/itchyny/lightline.vim             "
+" https://github.com/mengelbrecht/lightline-bufferline "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set laststatus=2	" Actually adds / shows lightline at the bottom
 set noshowmode
+set showtabline=2 " Required by bufferline
 
 let g:lightline = {
-   \ 'colorscheme': 'wombat',
+   \ 'colorscheme': 'gruvbox',
 	\ 'active': {
 	\   'left': [ [ 'mode', 'paste' ],
-	\             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
+	\             [ 'readonly', 'filename', 'modified' ] ],
 	\   'right': [ [ 'lineinfo' ],
 	\              [ 'percent' ],
-	\              [ 'fileformat', 'fileencoding', 'filetype', 'charvaluehex' ] ]
+	\              [ 'charvaluehex', 'fileformat', 'fileencoding', 'filetype' ] ]
 	\ },
+   \ 'tabline': {
+   \   'left': [ [ 'buffers' ] ],
+   \   'right': [ [ 'gitbranch'] ]
+   \ },
+   \ 'component_function': {
+   \   'filename': 'LightlineFilename',
+   \   'percent': 'LightlinePercent',
+   \   'lineinfo': 'LightlineLineinfo'
+   \ },
+   \ 'component_expand': {
+   \   'buffers': 'lightline#bufferline#buffers'
+   \ },
+   \ 'component_type': {
+   \   'buffers': 'tabsel'
+   \ },
    \ 'component': {
    \   'gitbranch': '%{exists("*FugitiveHead")?FugitiveHead():""}',
-   \   'readonly': '%{&filetype=="help"?"":&readonly?"RO":""}',
+   \   'readonly': '%{&filetype=="help"?"":&readonly?"🔒":""}',
    \   'modified': '%{&filetype=="help"?"":&modified?"+":&modifiable?"":"-"}',
    \   'charvaluehex': '0x%B'
    \ },
@@ -93,12 +100,63 @@ let g:lightline = {
    \ 'subseperator': { 'left': ' ', 'right': ' ' }
    \ }
 
+function! s:trim(maxlen, str) abort
+    let trimed = len(a:str) > a:maxlen ? a:str[0:a:maxlen] . '..' : a:str
+    return trimed
+endfunction
 
-"
-"COLOR
-"
+function! LightlineFilename() abort
+    let l:prefix = expand('%:p') =~? "fugitive://" ? '(fugitive) ' : ''
+    let l:maxlen = winwidth(0) - winwidth(0) / 2
+    let l:relative = expand('%:.')
+    let l:tail = expand('%:t')
+    let l:noname = 'No Name'
+
+    if winwidth(0) < 50
+        return ''
+    endif
+
+    if winwidth(0) < 86
+        return l:tail ==# '' ? l:noname : l:prefix . s:trim(l:maxlen, l:tail)
+    endif
+
+    return l:relative ==# '' ? l:noname : l:prefix . s:trim(l:maxlen, l:relative)
+endfunction
+
+function! LightlinePercent() abort
+    if winwidth(0) < 60
+        return ''
+    endif
+
+    let l:percent = line('.') * 100 / line('$') . '%'
+    return printf('%-4s', l:percent)
+endfunction
+
+function! LightlineLineinfo() abort
+    if winwidth(0) < 86
+        return ''
+    endif
+
+    let l:current_line = printf('%-3s', line('.'))
+    let l:max_line = printf('%-3s', line('$'))
+    let l:char_nr = printf('%-3s', col('.'))
+    let l:lineinfo = 'LN ' . l:current_line . '/' . l:max_line . ' CN ' . l:char_nr
+    return l:lineinfo
+endfunction
+
+"""""""""""""""""""""""
+" COLOR AND APPEARANCE "
+""""""""""""""""""""""""
 set termguicolors
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 let g:Hexokinase_highlighters = [ 'backgroundfull' ]
+
+set background=dark
+colorscheme gruvbox
+
+set cursorline
+hi cursorline cterm=none term=none
+autocmd WinEnter * setlocal cursorline
+autocmd WinLeave * setlocal nocursorline
 
