@@ -4,9 +4,9 @@
 #	export READER="zathura"
 #	export OPENER="xdg-open"
 	export PAGER="less"
-	export EDITOR="vim"
-#	export VISUAL="nvim"
-	export DIFFTOOL="vimdiff"
+	export EDITOR="nvim"
+	export VISUAL="nvim"
+	export DIFFTOOL="nvim -d"
 #	export BROWSER="firefox"
 
 

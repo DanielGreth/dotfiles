@@ -19,6 +19,7 @@ dmenu
 .local/* # TODO: change later
 .local/share/
 .local/src/
+.local/state/
 #.local/src/aur/*/*
 #!.local/src/aur/*/PKGBUILD TODO:
 
