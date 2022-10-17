@@ -24,9 +24,7 @@ if empty(glob(g:plug_location . g:autoload_plug))
 endif
 
 " Run PlugInstall if there are missing plugins
-autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-   \| PlugInstall -- sync | source $MYVIMRC
-\| endif
+autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)')) | PlugInstall --sync | source $MYVIMRC | endif
 
 " Shorthand to upgrade all plugins, including Plug
 command! PU PlugUpdate | PlugUpgrade
@@ -35,43 +33,58 @@ command! PU PlugUpdate | PlugUpgrade
 " {{{ Plugins
 call plug#begin(g:plugin_location)
 
-""" General Tools / Utilities
-"" Folder viewer
+"""""""""""""""""""""""""""""" General Tools / Utilities
+""""" File explorer
 " NERDTree
    Plug 'preservim/nerdtree'
 
-"" Git integration
+""""" Mass commenting
+" NERD Commenter
+   Plug 'preservim/nerdcommenter'
+
+""""" Git integration
 " fugitive
    Plug 'tpope/vim-fugitive'
+" vim-gitgutter
+   Plug 'airblade/vim-gitgutter'
 
-"" Better syntax highlighting
+""""" Better syntax highlighting
 " tree-sitter
    Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 
-""" Appearance
-"" Themes / colorschemes
+""""" Focus on work
+" Goyo.vim
+   Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
+
+" Limelight.vim
+   Plug 'junegunn/limelight.vim', { 'on': 'Goyo' }
+
+
+
+"""""""""""""""""""""""""""""" Appearance
+""""" Themes / colorschemes
 " Gruvbox
    Plug 'morhetz/gruvbox'  
 
-"" Color preview when editing files
+""""" Color preview when editing files
 " vim-hexokinase
    Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
 
-"" Line at the bottom
+""""" Line at the bottom
 " lightline
    Plug 'itchyny/lightline.vim'
 
-"" Line at the top
+""""" Line at the top
 " lightline-bufferline
    Plug 'mengelbrecht/lightline-bufferline'
 
-"" Icons for e.g. filetypes and nerdfonts (nerdfonts.com/cheat-sheet)
+""""" Icons for e.g. filetypes and nerdfonts (nerdfonts.com/cheat-sheet)
 " vim-devicons
    Plug 'ryanoasis/vim-devicons'
 
 
 
-""" Programming related
+"""""""""""""""""""""""""""""" Programming related
 
 call plug#end()
 "}}}

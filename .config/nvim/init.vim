@@ -83,6 +83,10 @@ let mapleader = ","        " Map the <Leader> key to ','
 set pastetoggle=<F11>      " <F11> toggle paste mode, usefull when wanting to paste text to vim correctly
 " Toggle NERDTree
 nnoremap <Leader>n :NERDTreeToggle<CR>
+" Toggle Goyo
+nnoremap <Leader>g :Goyo<CR>
+
+
 
 """""" Navigation bindings
 """ Buffers and windows movement

@@ -134,7 +134,7 @@ endfunction
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                     HEXOKINASE                       "
-" https://github.com/rrethy/vim-hexokinase.git         "
+" https://github.com/rrethy/vim-hexokinase             "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""
 set termguicolors                       " Needed for both theme and hexokinase (color preview)
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
@@ -145,9 +145,60 @@ let g:Hexokinase_highlighters = [ 'backgroundfull' ]
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                      GRUVBOX                         "
-" https://github.com/morhetz/gruvbox.git               "
+" https://github.com/morhetz/gruvbox                   "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:gruvbox_italic = 1
 let g:gruvbox_transparent_bg = 1
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                      NERDTree                        "
+" https://github.com/preservim/nerdtree.               "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Exit if NERDTree is the only window remaining in the only tab
+autocmd BufEnter * if tabpagenr('$') == 1  && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
+" Close the tab if NERDTree is the only window remaning in it
+autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                  NERD Commenter                      "
+" https://github.com/preservim/nerdcommenter           "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:NERDSpaceDelims = 1               " Add a space after comment character
+let g:NERDDefaultAlign = 'left'         " Allign comments to left instead of it following code indentation
+let g:NERDCommentWholeLinesInVMode = 1  " Comment out only whole lines
+let g:NERDCommentEmptyLines = 1         " Empty lines also gets commented
+
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                      Goyo vim                        "
+" https://github.com/junegunn/goyo.vim                 "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:goyo_height = 85
+let g:goyo_width = 100
+let g:goyo_linenr = 0
+" Turn Limelight on / off with Goyo
+autocmd! User GoyoEnter Limelight
+autocmd! User GoyoLeave Limelight!
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                  Limelight.vim                       "
+" https://github.com/junegunn/limelight.vim            "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:limelight_conceal_ctermfg = '#a89984'
+let g:limelight_conceal_guifg = '#928374'
+
+" Determines visibility of text out of focus (default: 0.5)
+let g:limelight_default_coefficient = 0.7
+" Number of preceding / following paragraphs to include (default = 0)
+let g:limelight_paragraph_span = 1
 
 
