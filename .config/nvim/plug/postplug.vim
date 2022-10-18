@@ -147,8 +147,8 @@ let g:Hexokinase_highlighters = [ 'backgroundfull' ]
 "                      GRUVBOX                         "
 " https://github.com/morhetz/gruvbox                   "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:gruvbox_italic = 1
-let g:gruvbox_transparent_bg = 1
+"let g:gruvbox_italic = 1
+"let g:gruvbox_transparent_bg = 1
 
 
 

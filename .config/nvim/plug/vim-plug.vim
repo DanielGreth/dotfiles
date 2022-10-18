@@ -64,7 +64,9 @@ call plug#begin(g:plugin_location)
 """""""""""""""""""""""""""""" Appearance
 """"" Themes / colorschemes
 " Gruvbox
-   Plug 'morhetz/gruvbox'  
+"   Plug 'morhetz/gruvbox'  
+" Gruvbox - but with support for tree sitter
+   Plug 'ellisonleao/gruvbox.nvim'
 
 """"" Color preview when editing files
 " vim-hexokinase
