@@ -87,6 +87,9 @@ call plug#begin(g:plugin_location)
 
 
 """""""""""""""""""""""""""""" Programming related
+""""" Code completion
+" YouCompleteMe
+   Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --clangd-completer' }
 
 call plug#end()
 "}}}

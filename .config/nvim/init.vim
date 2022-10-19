@@ -31,7 +31,7 @@ set list                   " Show invisible characters
 set listchars=extends:»,precedes:«,tab:␉·,eol:⏎,trail:␠,nbsp:⎵
 set fillchars+=vert:│      " Makes split divider seem more like a line, default is the pipe character
 set whichwrap=b,s,<,>,[,]  " Space, backspace, left- and right arrow is allowed to wrap lines
-set ttimeoutlen=200        " Timeout in ms for key codes, also the time used for going from insert mode to normal
+set ttimeoutlen=50         " Timeout in ms for key codes, also the time used for going from insert mode to normal
 set splitright             " When splitting window the new window is to th right
 set splitbelow             " When splitting window the new window is below
 
