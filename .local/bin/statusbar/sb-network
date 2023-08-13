@@ -1,0 +1,94 @@
+#!/bin/bash
+# Script responsible for the network part of the statusbar
+# Note this script relies on NetworkManager and iw
+
+# Wi-Fi 󰤫  󰤯  󰤟  󰤢  󰤥  󰤨
+# Ethernet 󰈀
+# Disconnected 󰕑
+
+function notify {
+   nmcli_info=($(nmcli connection | awk 'NR==2{ gsub(/(Wired\sconnection\s)/,"Wired-connection-"); print $1, $3, $4; exit }'))
+   gateway_ip=($(ip route | awk 'NR==1{ print $3, $9 }'))
+   public_ip=$(curl --silent ifconfig.me)
+   mac=$(ip link show | awk '/'"${nmcli_info[2]}"'/ { getline; print $2 }')
+
+   dunstify -a "network_info" -u low -h string:x-dunst-stack-tag:network_info \
+"Connected:
+  To: ${nmcli_info[0]}
+  By: ${nmcli_info[1]} 
+  On: ${nmcli_info[2]}
+󰑩 GW: ${gateway_ip[0]}
+ IP: ${gateway_ip[1]}
+ IP: $public_ip 
+ MAC: $mac"
+}
+
+function notify_right {
+   if [ "$network_type" == "w" ]; then
+      device_info="$(iw dev wlp3s0 link | awk 'NR >= 2 && NR <= 8{ gsub(/x bitrate/,"x-br"); print $1"\t"$2" "$3" "$4" "$5" "$6}')"
+   elif [ "$network_type" == "e" ]; then
+      device_info="$(cat /sys/class/net/enp2s0/speed) Mb/s"
+   else
+      device_info="Not connected to the internet"
+   fi
+
+   dunstify -a "iwconfig_info" -u low -h string:x-dunst-stack-tag:iwconfig_info \
+      "$device_info"
+}
+
+network_type=$(ip route list | grep -Po -m1 'default.*dev \K\w')
+
+if [ "$network_type" == "w" ]; then
+   signal_strength=$(cat /proc/net/wireless | awk 'NR==3{ gsub(/\./,""); print $4 }')
+   info=$signal_strength
+   if [ "$signal_strength" -le "-30" ] && [ "$signal_strength" -ge "-49" ]; then   # Great Signal
+      info="󰤨 $signal_strength"
+      colorfg=2
+      colorbg=16
+   elif [ "$signal_strength" -le "-50" ] && [ "$signal_strength" -ge "-59" ]; then # Good Signal
+      info="󰤥 $signal_strength"
+      colorfg=2
+      colorbg=16
+   elif [ "$signal_strength" -le "-60" ] && [ "$signal_strength" -ge "-69" ]; then # Average Signal
+      info="󰤢 $signal_strength"
+      colorfg=3
+      colorbg=16
+   elif [ "$signal_strength" -le "-70" ] && [ "$signal_strength" -ge "-79" ]; then # Poor Signal
+      info="󰤟 $signal_strength"
+      colorfg=1
+      colorbg=16
+   elif [ "$signal_strength" -le "-80" ] && [ "$signal_strength" -ge "-89" ]; then # Very Poor Signal
+      info="󰤯 $signal_strength"
+      colorfg=1
+      colorbg=16
+   else                                                                            # Just give up
+      info="󰤫 $signal_strength"
+      colorfg=1
+      colorbg=16
+   fi
+elif [ "$network_type" == "e" ]; then
+   info="󰈀 "
+   colorfg=2
+   colorbg=16
+else
+   info="󰕑 "
+   colorfg=1
+   colorbg=16
+fi
+
+case $BLOCK_BUTTON in
+   1) notify ;; # Left click
+#   2) ;; # Middle click
+   3) notify_right ;; # Right click
+#   4) ;; # Scrollup
+#   5) ;; # Scrolldown
+   6) "$TERMINAL" -e "$EDITOR" "$0" ;; # Shift Left click
+#   7) ;; # Shift Middle click
+#   8) ;; # Shift Right click
+#   9) ;; # Shift Scrollup
+#   10) ;; # Shift Scrolldown
+esac
+
+. sb-theme
+display " $info dBm" "$colorfg" "$colorbg"
+

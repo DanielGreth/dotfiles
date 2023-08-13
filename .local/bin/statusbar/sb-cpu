@@ -1,0 +1,43 @@
+#!/bin/bash
+# Display the average CPU load
+# load[0] = loadavg 1 min
+# load[1] = loadavg 5 min
+# load[2] = loadavg 15 min
+
+function notify {
+   dunstify -a "cpu_info" -u low -h string:x-dunst-stack-tag:cpu_info \
+      "CPU loadavg:
+1  min: ${load[0]}
+5  min: ${load[1]}
+15 min: ${load[2]}"
+}
+
+load=($(cat /proc/loadavg | awk '{ print $1, $2, $3 }'))
+
+if (( $(echo "${load[2]} <= 1.50" | bc -l) )); then
+   colorfg=2
+   colorbg=16
+elif (( $(echo "${load[2]} > 1.50" | bc -l) )) && (( $(echo "${load[2]} < 4.00" | bc -l) )); then
+   colorfg=3
+   colorbg=16
+else
+   colorfg=1
+   colorbg=16
+fi
+
+case $BLOCK_BUTTON in
+   1) notify ;; # Left click
+#   2) ;; # Middle click
+#   3) ;; # Right click
+#   4) ;; # Scrollup
+#   5) ;; # Scrolldown
+   6) "$TERMINAL" -e "$EDITOR" "$0" ;; # Shift Left click
+#   7) ;; # Shift Middle click
+#   8) ;; # Shift Right click
+#   9) ;; # Shift Scrollup
+#   10) ;; # Shift Scrolldown
+esac
+
+. sb-theme
+display "  ${load[2]}" "$colorfg" "$colorbg"
+

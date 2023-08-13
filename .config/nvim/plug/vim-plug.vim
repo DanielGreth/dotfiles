@@ -32,64 +32,63 @@ command! PU PlugUpdate | PlugUpgrade
 " }}}
 " {{{ Plugins
 call plug#begin(g:plugin_location)
-
-"""""""""""""""""""""""""""""" General Tools / Utilities
-""""" File explorer
-" NERDTree
-   Plug 'preservim/nerdtree'
-
-""""" Mass commenting
-" NERD Commenter
-   Plug 'preservim/nerdcommenter'
-
-""""" Git integration
-" fugitive
-   Plug 'tpope/vim-fugitive'
-" vim-gitgutter
-   Plug 'airblade/vim-gitgutter'
-
-""""" Better syntax highlighting
-" tree-sitter
-   Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
-
-""""" Focus on work
-" Goyo.vim
+   Plug 'nvim-lua/plenary.nvim'
+   Plug 'windwp/nvim-autopairs'
+   Plug 'numToStr/Comment.nvim'
+   Plug 'JoosepAlviste/nvim-ts-context-commentstring'
+   Plug 'nvim-tree/nvim-web-devicons'
+   Plug 'nvim-tree/nvim-tree.lua', { 'on': 'NvimTreeToggle' }
+   Plug 'akinsho/bufferline.nvim'
+   Plug 'moll/vim-bbye'
+   Plug 'nvim-lualine/lualine.nvim'
+   Plug 'akinsho/toggleterm.nvim'
+   Plug 'ahmedkhalf/project.nvim'
+   Plug 'lukas-reineke/indent-blankline.nvim'
+   Plug 'goolord/alpha-nvim'
    Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
-
-" Limelight.vim
    Plug 'junegunn/limelight.vim', { 'on': 'Goyo' }
+   Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
+   Plug 'preservim/tagbar'
 
+""""" Telescope
+   Plug 'nvim-telescope/telescope.nvim'
+   Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
-
-"""""""""""""""""""""""""""""" Appearance
 """"" Themes / colorschemes
-" Gruvbox
-"   Plug 'morhetz/gruvbox'  
-" Gruvbox - but with support for tree sitter
    Plug 'ellisonleao/gruvbox.nvim'
 
-""""" Color preview when editing files
-" vim-hexokinase
-   Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
+""""" Treesitter
+   Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 
-""""" Line at the bottom
-" lightline
-   Plug 'itchyny/lightline.vim'
+""""" LSP Support
+   Plug 'williamboman/mason.nvim'
+   Plug 'williamboman/mason-lspconfig.nvim'
+   Plug 'neovim/nvim-lspconfig'
+   Plug 'jose-elias-alvarez/null-ls.nvim'
+   Plug 'RRethy/vim-illuminate'
+   Plug 'SmiteshP/nvim-navic'
 
-""""" Line at the top
-" lightline-bufferline
-   Plug 'mengelbrecht/lightline-bufferline'
-
-""""" Icons for e.g. filetypes and nerdfonts (nerdfonts.com/cheat-sheet)
-" vim-devicons
-   Plug 'ryanoasis/vim-devicons'
-
-
-
-"""""""""""""""""""""""""""""" Programming related
 """"" Code completion
-" YouCompleteMe
-   Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --clangd-completer' }
+   Plug 'hrsh7th/nvim-cmp'
+   Plug 'hrsh7th/cmp-buffer'
+   Plug 'hrsh7th/cmp-path'
+   Plug 'hrsh7th/cmp-cmdline'
+   Plug 'saadparwaiz1/cmp_luasnip'
+   Plug 'hrsh7th/cmp-nvim-lsp'
+   Plug 'hrsh7th/cmp-nvim-lua'
+   Plug 'hrsh7th/cmp-emoji'
+   Plug 'onsails/lspkind.nvim'
+
+""""" Snippet
+   Plug 'L3MON4D3/LuaSnip'
+   "Plug ''
+
+""""" Git
+   Plug 'lewis6991/gitsigns.nvim'
+
+""""" Mass commenting
+"   Plug 'preservim/nerdcommenter'
+
 
 call plug#end()
 "}}}

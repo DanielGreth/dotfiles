@@ -9,4 +9,15 @@ fi
 
 [ -f "$XDG_CONFIG_HOME/X11/xprofile" ] && . "$XDG_CONFIG_HOME/X11/xprofile"
 
-ssh-agent "
+#Set my keyboard layout to danish, for some reason, after pacman -Syu this sometimes needs to be run again
+setxkbmap dk
+
+# Make sure numlock stays turned on after login
+numlockx &
+
+# Start dwm, if dwm is not running start it again (e.g. if dwm is terminated with [shift]+[alt]+[q])
+while true; do
+	dwm > /dev/null 2>&1
+done
+
+ssh-agent "${WM:-dwm}" > /tmp/wmlog 2>&1

@@ -1,0 +1,64 @@
+#!/bin/bash
+# Script that sends a notification every 5 minutes showing
+# whether or not the battery is charging or discharging +
+# the level. If the battery falls below 30% it uses the 
+# critical notification.
+
+function notify_low {
+   dunstify -u low -i $1 \
+      "$BATTERY_STATUS, $BATTERY_LEVEL
+${BATTERY_REMAINING#?}"
+}
+
+function notify_critical {
+   dunstify -u critical -i battery-070 \
+      "$BATTERY_STATUS, $BATTERY_LEVEL
+${BATTERY_REMAINING#?}"
+}
+
+while true
+do
+   BATTERY_STATUS=$(acpi -b | awk -F ',' '{ gsub(/Battery 0: /,""); print $1 }' )
+   BATTERY_LEVEL=$(acpi -b | awk -F ',' '{ gsub(/ /,""); print $2 }' )
+   BATTERY_REMAINING=$(acpi -b | awk -F ',' '{ print $3 }' )
+
+   case $BATTERY_STATUS in
+      "Full") STATUS="" ;;
+      "Discharging") STATUS="" ;;
+      "Charging") STATUS="-charging" ;;
+      "Not charging") STATUS="" ;;
+      *) STATUS="" ;;
+   esac
+
+   if [ ${BATTERY_LEVEL%?} -eq 100 ]; then
+      LEVEL="battery-100"
+   elif [ ${BATTERY_LEVEL%?} -ge 90 ]; then
+      LEVEL="battery-090"
+   elif [ ${BATTERY_LEVEL%?} -ge 80 ]; then
+      LEVEL="battery-080"
+   elif [ ${BATTERY_LEVEL%?} -ge 70 ]; then
+      LEVEL="battery-070"
+   elif [ ${BATTERY_LEVEL%?} -ge 60 ]; then
+      LEVEL="battery-060"
+   elif [ ${BATTERY_LEVEL%?} -ge 50 ]; then
+      LEVEL="battery-050"
+   elif [ ${BATTERY_LEVEL%?} -ge 40 ]; then
+      LEVEL="battery-040"
+   elif [ ${BATTERY_LEVEL%?} -ge 30 ]; then
+      LEVEL="battery-030"
+   elif [ ${BATTERY_LEVEL%?} -ge 20 ]; then
+      LEVEL="battery-020"
+   elif [ ${BATTERY_LEVEL%?} -ge 10 ]; then
+      LEVEL="battery-010"
+   else
+      LEVEL="battery-000"
+   fi
+
+   if [ ${BATTERY_LEVEL%?} -ge 30 ]; then
+      notify_low "${LEVEL}${STATUS}"
+   else
+      notify_critical "${LEVEL}${STATUS}"
+   fi
+
+   sleep 300 # 300 seconds
+done

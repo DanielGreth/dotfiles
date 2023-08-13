@@ -1,0 +1,53 @@
+#!/bin/bash
+# Script that displays the network activity, on both the uplink
+# and downlink for either a Wi-Fi or ehternet connection. With
+# the ability to set an interval, which the calculation should
+# be measured over.
+# upload icon: 
+# download icon: 
+
+interval=1
+network_type=$(ip route list | grep -Po -m1 'default.*dev \K\w')
+
+if [ "$network_type" == "w" ]; then
+   rx1=$(cat /sys/class/net/wlp3s0/statistics/rx_bytes)
+   tx1=$(cat /sys/class/net/wlp3s0/statistics/tx_bytes)
+
+   sleep $interval
+
+   rx2=$(cat /sys/class/net/wlp3s0/statistics/rx_bytes)
+   tx2=$(cat /sys/class/net/wlp3s0/statistics/tx_bytes)
+
+   info=$(printf '  %skB/s   %skB/s' "$(echo "scale=2; ($rx2-$rx1) / $interval / 1000" | bc)" "$(echo "scale=2; ($tx2-$tx1) / $interval / 1000" | bc)")
+
+elif [ "$network_type" == "e" ]; then
+   rx1=$(cat /sys/class/net/enp2s0/statistics/rx_bytes)
+   tx1=$(cat /sys/class/net/enp2s0/statistics/tx_bytes)
+
+   sleep $interval
+
+   rx2=$(cat /sys/class/net/enp2s0/statistics/rx_bytes)
+   tx2=$(cat /sys/class/net/enp2s0/statistics/tx_bytes)
+
+   info=$(printf '  %skB/s   %skB/s' "$(echo "scale=2; ($rx2-$rx1) / $interval / 1000" | bc)" "$(echo "scale=2; ($tx2-$tx1) / $interval / 1000" | bc)")
+
+else
+   info="  -kB/s   -kB/s"
+fi
+
+case $BLOCK_BUTTON in
+#   1) ;; # Left click
+#   2) ;; # Middle click
+#   3) ;; # Right click
+#   4) ;; # Scrollup
+#   5) ;; # Scrolldown
+   6) "$TERMINAL" -e "$EDITOR" "$0" ;; # Shift Left click
+#   7) ;; # Shift Middle click
+#   8) ;; # Shift Right click
+#   9) ;; # Shift Scrollup
+#   10) ;; # Shift Scrolldown
+esac
+
+. sb-theme
+display " $info"
+

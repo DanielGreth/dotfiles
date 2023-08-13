@@ -1,0 +1,24 @@
+#!/bin/bash
+# Displays the current time in the statusbar
+# Format:  HH:MM:SS  (uses 24 hour clock)
+
+function notify {
+   dunstify -a "time_info" -u low \
+      "$1"
+}
+
+case $BLOCK_BUTTON in
+#   1) ;; # Left click
+#   2) ;; # Middle click
+#   3) ;; # Right click
+#   4) ;; # Scrollup
+#   5) ;; # Scrolldown
+   6) "$TERMINAL" -e "$EDITOR" "$0" ;; # Shift Left click
+#   7) ;; # Shift Middle click
+#   8) ;; # Shift Right click
+#   9) ;; # Shift Scrollup
+#   10) ;; # Shift Scrolldown
+esac
+
+. sb-theme
+display " 󰥔 $(date '+%T')"

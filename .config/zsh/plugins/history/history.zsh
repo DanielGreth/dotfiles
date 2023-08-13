@@ -11,3 +11,4 @@
 	setopt hist_ignore_dups		# Ignore duplicated commands history lists
 	setopt hist_ignore_space	# Ignore commands that start with space
 	setopt hist_reduce_blanks	# Remove extra blanks from each command line being added to history
+

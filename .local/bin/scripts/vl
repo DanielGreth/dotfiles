@@ -1,0 +1,75 @@
+#!/bin/bash
+
+#  vl inc 0.02    to increase volume by 2%
+#  vl dec 0.02    to decrease volume by 2%
+#  vl             to set volumne to default value
+#  vl set 0.50    to set volumne to 50%, I only allow value between 0.000 to 0.999 (0% - 99.9%)
+#  vl toggle_mute to toggle between mute and unmute, it saves the current volumne 
+
+msgTag="vol_change"
+
+#default_volume=0.063997 #6.3997%
+default_volume=0.5
+
+function get_volume {
+   local current_volume=$(cat $XDG_CACHE_HOME/current_volume)
+   echo "$current_volume"
+}
+
+function set_volume {
+   pw-cli s $AUDIO_SINK_ID Props "{ mute: false, channelVolumes: [ $1, $1 ] }" > /dev/null
+   echo "$1" > $XDG_CACHE_HOME/current_volume
+}
+
+function check_mute {
+   local is_mute=$(pw-cli e $AUDIO_SINK_ID Props | grep -A 1 mute | awk '/Bool / {gsub(/.*Bool\s/," "); print $1 }')
+   echo "$is_mute"
+}
+
+function send_notification {
+   volume=$(echo "scale=0; $(get_volume)*100/1" | bc)
+   bar=$(seq -s "─" $(($(echo $volume /5 | bc))) | sed 's/[0-9]//g')
+   dunstify -a "changedVolume" -u low -h string:x-dunst-stack-tag:$msgTag \
+      "󰕾 [${volume}]  $bar"
+}
+
+# Handle arguments
+case "$1" in
+   inc)
+      new_volume=$(echo $(get_volume)+$2 | bc)
+      set_volume "$new_volume"
+      send_notification
+   ;;
+
+   dec)
+      new_volume=$(echo $(get_volume)-$2 | bc)
+      set_volume "$new_volume"
+      send_notification
+   ;;
+
+   set)
+      [[ $2 =~ ^0.[0-9]{1,3}$ ]] && set_volume "$2" || break
+      send_notification
+   ;;
+
+   toggle_mute)
+      cur_volume=$(echo $(get_volume))
+      [[ $(check_mute) == true ]] && pw-cli s $AUDIO_SINK_ID Props "{ mute: false, channelVolumes: [ $cur_volume, $cur_volume ] }" > /dev/null || pw-cli s $AUDIO_SINK_ID Props "{ mute: true, channelVolumes: [ $cur_volume, $cur_volume ] }" > /dev/null
+
+      if command -v dunst >/dev/null; then
+         if [[ $(check_mute) == true ]]; then
+            dunstify -a "changedVolume" -u low -h string:x-dunst-stack-tag:$msgTag \
+               "󰕾 Unmuted"
+         else
+            dunstify -a "changedVolume" -u low -h string:x-dunst-stack-tag:$msgTag \
+               "󰖁 Muted"
+         fi
+      fi
+   ;;
+
+   *)
+      set_volume "$default_volume"
+      send_notification
+   ;;
+esac
+

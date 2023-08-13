@@ -1,0 +1,40 @@
+#!/bin/bash
+# Displays number of available updates via pacman
+
+function notify {
+   dunstify -a "pacman_info" -u low -h string:x-dunst-stack-tag:pacman_info \
+      "$1"
+}
+
+updates=$(checkupdates | wc -l)
+
+if [ "$updates" -eq 0 ]; then
+   colorfg=7
+   colorbg=16
+elif [ "$updates" -gt 1 ] && [ "$updates" -le 5 ]; then
+   colorfg=2
+   colorbg=16
+elif [ "$updates" -gt 5 ] && [ "$updates" -le 10 ]; then
+   colorfg=3
+   colorbg=16
+else
+   colorfg=1
+   colorbg=16
+fi
+
+case $BLOCK_BUTTON in
+#   1) ;; # Left click
+#   2) ;; # Middle click
+#   3) ;; # Right click
+#   4) ;; # Scrollup
+#   5) ;; # Scrolldown
+   6) "$TERMINAL" -e "$EDITOR" "$0" ;; # Shift Left click
+#   7) ;; # Shift Middle click
+#   8) ;; # Shift Right click
+#   9) ;; # Shift Scrollup
+#   10) ;; # Shift Scrolldown
+esac
+
+. sb-theme
+display " 󱧕 $updates" "$colorfg" "$colorbg"
+

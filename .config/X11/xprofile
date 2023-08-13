@@ -16,13 +16,23 @@
 	xsetroot -cursor_name left_ptr # Needed because of hsetroot
 	mon -e
 	[ -f "$XDG_CONFIG_HOME/X11/Xresources" ] && xrdb -load ~/.config/X11/Xresources
-	if [ -f "$XDG_DATA_HOME/bg" ]; then # Check if there is an active wallpaper
-		[ -f "$XDG_CACHE_HOME/wal/active" ] && wal -R || sbg # Dirty trick to check if pywal was on at shutdown
-	else
-		hsetroot -solid "$(cat $XDG_CACHE_HOME/bgcol)"
-	fi
 
-	_ dunst				# Notification daemon
-	togcomp -y			# Compositor (picom)
-	xdotool mousemove 1000 700	# Position cursor at approx the center of the screen
-	_ redshift			# Ajust the color temeprature of the screen depending on time of day
+#	wal -R # -R restores the last colorscheme that was in use.
+   hsetroot -center /home/greth/wallpaper/astronaut-jellyfish-space.jpg
+
+   # Create environment variable of ID of my speaker, used in 'vl' script
+   sleep 1; export AUDIO_SINK_ID=$(pw-cli ls Node | awk -F '"' '/object.serial/{ ID=$2; next } /Audio\/Sink/ { print ID }')
+
+   # Print current volume to cached file, if it doesn't exist create it
+   if [[ ! -e $XDG_CACHE_HOME/current_volume ]]; then
+      touch $XDG_CACHE_HOME/current_volume
+      pw-cli e $AUDIO_SINK_ID Props | awk 'NR==8 { gsub(",","."); print $2 }' > $XDG_CACHE_HOME/current_volume
+   else
+      pw-cli e $AUDIO_SINK_ID Props | awk 'NR==8 { gsub(",","."); print $2 }' > $XDG_CACHE_HOME/current_volume
+   fi
+
+   dwmblocks & # Start dwmblocks
+	_ dunst				  # Notification daemon
+	DRI_PRIME=0 picom --backend glx & # Use integrated graphics, Intel, because the glx backend does not work with my AMD card
+	xdotool mousemove 1000 700	  # Position cursor at approx the center of the screen
+	_ redshift			  # Ajust the color temeprature of the screen depending on time of day

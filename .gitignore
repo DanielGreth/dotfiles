@@ -40,4 +40,11 @@ dmenu
 .bash_profile
 .bashrc
 
+# pulse
+.config/pulse/cookie
 
+# VirtualBox
+.config/VirtualBox/
+
+# Wallpapers
+wallpaper/

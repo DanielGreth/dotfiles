@@ -1,14 +1,4 @@
--- Treesitter
--- https://github.com/nvim-treesitter/nvim-treesitter
-require("nvim-treesitter.configs").setup({
-   ensure_installed = { "c", "cpp", "vim", "latex", "lua", "bash", "json", "gitignore", "make", "markdown", "python"},
-   highlight = {
-      enable = true,
-      disable = { "latex" },
-      additional_vim_regex_highlighting = false,
-   },
-
-})
+local colorscheme = "gruvbox"
 
 -- Ellisonleao Gruvbox (tree sitter support)
 -- https://github.com/ellisonleao/gruvbox.nvim
@@ -16,7 +6,12 @@ require("gruvbox").setup({
    undercurl = true,
    underline = true,
    bold = true,
-   italic = true,
+   italic = {
+      strings = true,
+      comments = true,
+      operators = false,
+      folds = true,
+   },
    strikethrough = true,
    invert_selection = false,
    invert_signs = false,
@@ -29,4 +24,8 @@ require("gruvbox").setup({
    dim_inactive = false,
    transparent_mode = false,
 })
-vim.cmd("colorscheme gruvbox")
+
+local status_ok, _ = pcall(vim.cmd, "colorscheme " .. colorscheme)
+if not status_ok then
+   return
+end

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+case "$(printf "󰌾 Lock\\n󰐥 Shutdown\\n󰑐 Reboot\\n󰒲 Sleep\\n Logout" | mydmenu -i -p "Power Options")" in
+   "󰌾 Lock") echo $(slock) ;;
+   "󰐥 Shutdown") echo $(shutdown -h now) ;;
+   "󰑐 Reboot") echo $(reboot) ;;
+   "󰒲 Sleep") echo $(systemctl suspend) ;;
+   " Logout") echo $(pkill -u greth) ;;
+esac

@@ -42,8 +42,7 @@ let g:lightline = {
    \   'charvaluehex': '0x%B'
    \ },
    \ 'component_visible_condition': {
-   \   'modified': '(&filetype!="help" && (&modified || !&modifiable))',
-   \   'charvaluehex': 'winwidth(0) > 70'
+   \   'modified': '(&filetype!="help" && (&modified || !&modifiable))',  
    \ },
    \ 'seperator': { 'left': ' ', 'right': ' '  },
    \ 'subseperator': { 'left': ' ', 'right': ' ' }
@@ -156,6 +155,7 @@ let g:Hexokinase_highlighters = [ 'backgroundfull' ]
 "                      NERDTree                        "
 " https://github.com/preservim/nerdtree.               "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:NERDTreeShowHidden = 1            " Show hidden files by default
 " Exit if NERDTree is the only window remaining in the only tab
 autocmd BufEnter * if tabpagenr('$') == 1  && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
 
@@ -174,6 +174,13 @@ let g:NERDCommentWholeLinesInVMode = 1  " Comment out only whole lines
 let g:NERDCommentEmptyLines = 1         " Empty lines also gets commented
 
 
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                       Tagbar                         "
+" https://github.com/preservim/tagbar                  "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:tagbar_autoshowtag = 1
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""

@@ -3,7 +3,7 @@
 
 # Speed up completion loading at startup
 	zcachedir="$XDG_CACHE_HOME/zsh"
-	[[ -d "$zcachedir" ]]  mkdir -p "$zcachedir"
+	[[ -d "$zcachedir" ]] || mkdir -p "$zcachedir"
 
 	() {
 		setopt local_options extendedglob
@@ -18,7 +18,7 @@
 		# N => NULL_GLOB
 		# . => plain files
 		# m[Mwhms][-|+]n => modification time qualifiers
-		if [[ -e "$zcompf_a" && -f "$zcompf_a" (#qN.mh-24) ]]; then
+		if [[ -e "$zcompf_a" && -f "$zcompf_a"(#qN.mh-24) ]]; then
 			compinit -C -u -d "$zcompf" # Skip checking for insecure files/directories (compaudit)
 		else
 			compinit -u -d "$zcompf"
@@ -116,3 +116,8 @@
 		dirs -v | head -${1:-11}
 	}
 	compdef _dirs di
+
+# Load Git completion
+   zstyle ':completion:*:*:git*' script "$XDG_CONFIG_HOME/zsh/git-completion.bash"
+   fpath=($XDG_CONFIG_HOME/zsh $fpath)
+   #autoload -Uz compinit && compinit

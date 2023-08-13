@@ -1,0 +1,51 @@
+#!/bin/bash
+# Utility functions for theming statusbar scripts
+# Colors are defined in Xresources.d/
+# 16 = background
+# 17 = forground
+
+function display {
+
+   # The forground color of the blocks (text)
+   if [ -n "$2" ]; then
+      colorfg="$2"
+   else
+      case "$(basename "$0")" in
+         sb-updates) colorfg=7 ;;
+         sb-network) colorfg=7 ;;
+         sb-up_down) colorfg=7 ;;
+         sb-memory) colorfg=7 ;;
+         sb-cpu) colorfg=7 ;;
+         sb-disk) colorfg=7 ;;
+         sb-volume) colorfg=7 ;;
+         sb-battery) colorfg=7 ;;
+         sb-time) colorfg=7 ;;
+         sb-date) colorfg=7 ;;
+         *) colorfg=7 ;;
+      esac
+   fi
+
+   # The background color of the blocks
+   if [ -n "$3" ]; then
+      colorbg="$3"
+   else
+      case "$(basename "$0")" in
+         sb-updates) colorbg=16;;
+         sb-network) colorbg=16;;
+         sb-up_down) colorbg=16;;
+         sb-memory) colorbg=16;;
+         sb-cpu) colorbg=16;;
+         sb-disk) colorbg=16;;
+         sb-volume) colorbg=16;;
+         sb-battery) colorbg=16;;
+         sb-time) colorbg=16 ;;
+         sb-date) colorbg=16 ;;
+         *) colorbg=16 ;;
+      esac
+   fi
+
+   # For more info about setting color checkout: dwm.suckless.org/patches/status2d/
+   echo "^C$colorfg^^B$colorbg^^f0^$1"
+   #echo "^B$colorbg^$1"
+   #echo "^C$colorbg^$1"
+}

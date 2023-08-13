@@ -1,0 +1,59 @@
+#!/bin/bash
+
+# This script is based around Francesco Minnocci's script of same name
+# Script for changin brightness
+# Examples:
+#    br set 50      to set brightness to 50%
+#    br             to set brightness to default (80%)
+#    br inc 2       to increse brightness by 2%
+#    br dec 2       to decrease brightness by 2%
+
+
+
+# Francesco Minnocci 2020
+# Dependencies: dmenu, dunst [optional]
+
+
+
+# NOTE: use the command lines to automatically set the
+# parameters with fd [or find,  but it'll be slower]
+# However, it's much faster to use the specific
+# brightness file and ratio, once you know them.
+
+#TODO change this to linear percieved brightness instead of what it currently is
+
+# Set variables
+default=80
+msgTag="changeBrightness"
+brdir=/sys/class/backlight/intel_backlight
+max_brightness=937 # Check value of /sys/class/backlight/intel_backlight/max_brightness
+
+# Calculate ratio to scale brightness with
+ratio=$(echo "scale=2; $max_brightness/100" | bc)
+
+# Get the current brightness percentage
+current_brightness=$(echo "scale=2; $(cat $brdir/brightness)/$ratio" | bc)
+
+# Handle arguments
+case "$1" in
+   inc)
+      valnorm=$(echo $current_brightness+$2 | bc) ;;
+   dec)
+      valnorm=$(echo $current_brightness-$2 | bc) ;;
+   set)
+      valnorm="$2 " ;;
+   *)
+      valnorm="$default" ;;
+esac
+
+# Set brightness value
+new_brightness=$(echo $valnorm*$ratio/1 | bc )
+echo $new_brightness > /sys/class/backlight/intel_backlight/brightness
+
+## Notify
+if command -v dunst >/dev/null; then
+   bar=$(seq -s "─" $(($(echo $valnorm/5 | bc))) | sed 's/[0-9]//g')
+   new=$(echo "scale=0; $(cat $brdir/brightness)/$ratio" | bc)
+   dunstify -a "changeBrightness" -u low -h string:x-dunst-stack-tag:$msgTag \
+      "󰖨 [${new}]  $bar"
+fi

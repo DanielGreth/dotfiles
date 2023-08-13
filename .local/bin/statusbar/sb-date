@@ -1,0 +1,46 @@
+#!/bin/bash
+# Displays the current day and month in the statusbar
+# Format:  day(nr)/month(abvr)
+# Left click    shows the current month using dunst
+# Scrollup      shows the next month (reset with left click)
+# Scrolldown    shows the previous month (reset with left click)
+
+function notify {
+   today=$(date '+%-d')
+   head=$(cal "$1" | head -n1 )
+   body=$(cal "$1" | tail -n7 | sed -z "s|$today|<u><b>$today</b></u>|1")
+   foot="\n<i>       ~ calendar</i> 󰸗"
+   dunstify -a "date_info" -u low -h string:x-dunst-stack-tag:date_info \
+      "$head" "$body$foot"
+}
+
+function handle {
+   echo "$diff" > "$tmp"
+   if [ "$diff" -ge 0 ]; then
+      notify "+$diff months"
+   else
+      notify "$((-diff)) months ago"
+   fi
+}
+
+tmp=${XDG_RUNTIME_DIR:-/tmp}/"$UID"_calender_notification_month
+touch "$tmp"
+
+diff=$(<"$tmp")
+
+case $BLOCK_BUTTON in
+   1) diff=0 handle ;;
+#   2) ;; # Middle click
+#   3) ;; # Right click
+   4) diff=$((diff+1)) handle ;; # Scrollup
+   5) diff=$((diff-1)) handle ;; # Scrolldown
+   6) "$TERMINAL" -e "$EDITOR" "$0" ;; # Shift Left click
+#   7) ;; # Shift Middle click
+#   8) ;; # Shift Right click
+#   9) ;; # Shift Scrollup
+#   10) ;; # Shift Scrolldown
+esac
+
+. sb-theme
+display " 󰸗 $(date '+%a %d %b')"
+

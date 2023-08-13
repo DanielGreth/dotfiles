@@ -1,9 +1,6 @@
 !# vim: ft=xdefaults
 
 #include "dark"
-! #include "light"
-! #include "material-dark"
-! #include "material-light"
 
 *.cursorColor: #add8e6
 *RcursorColor: #555555
@@ -21,41 +18,29 @@
 *.color9: C9
 *.color10: C10
 *.color11: C11
-*.color12: C13
+*.color12: C12
 *.color13: C13
 *.color14: C14
 *.color15: C15
 
 ! dwm
 !! Borders
-dwm.borderpx:		6
-dwm.normbordercolor:	C0
-dwm.selbordercolor:	C7
-dwm.borderbar:		C0
-!! Bar
-!!! Layout
-dwm.topbar:		0
-dwm.showbar:		0
-!!! Colors
-dwm.tagnormbg:		BG
-dwm.tagnormfg:		C8
-dwm.tagselbg:		C0
-dwm.tagselfg:		C4
+dwm.normbordercolor: C0
+dwm.selbordercolor:  C1
+dwm.borderbar:       C0
+!! Tags
+dwm.tagnormbg:       BG
+dwm.tagnormfg:       C8
+dwm.tagselbg:        C0
+dwm.tagselfg:        C1
 !! Window Title section
-dwm.infoselbg:		C4
-dwm.infoselfg:		BG
-dwm.infonormbg:		BG
-dwm.infonormfg:		FG
-!!! dwmblocks colors
-dwm.normbgcolor:	C0
-dwm.normfgcolor:	C7
-! From vanitygaps: 1 means no gaps for a single client
-dwm.smartgaps:		0
-!! Not used
-! dwm.selbgcolor:		BG
-! dwm.selfgcolor:		FG
-! dwm.statusbg:		C0
-! dwm.statusfg:		FG
+dwm.infoselbg:       C1
+dwm.infoselfg:       BG
+dwm.infonormbg:      BG
+dwm.infonormfg:      FG
+!! Status section
+dwm.statusbg:        BG
+dwm.statusfg:        C1
 
 !! Dmenu
 dmenu.background:	C0
@@ -67,10 +52,3 @@ dmenu.hiforeground:	FG
 dmenu.hiselbackground:	C5
 dmenu.hiselforeground:	FG
 
-!! Tabbed
-tabbed.normbgcolor:	C4
-tabbed.normfgcolor:	FG
-tabbed.selbgcolor :	BG
-tabbed.selfgcolor :	#fbf1c7
-tabbed.urgbgcolor :	C0
-tabbed.urgfgcolor :	C1

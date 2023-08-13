@@ -1,0 +1,60 @@
+# IMPORTANT: zsh does not care for this file, but it works in bash
+
+set bell-style none
+# Fixes some buttons when using st
+set enable-keypad on
+set colored-stats on
+set visible-stats on
+set mark-symlinked-directories on
+set colored-completion-prefix on
+set blink-matching-paren on
+set comment-begin #
+set completion-prefix-display-length 111
+set completion-query-items 200
+set keyseq-timeout 100
+set input-meta on
+set convert-meta off
+set output-meta on
+set disable-completion off
+set echo-control-characters on
+set match-hidden-files off
+set page-completions on
+set completion-ignore-case on
+set show-all-if-ambiguous on
+set show-all-if-unmodified on
+set print-completions-horizontally on
+
+# Tab for printing completion; Shift+Tab for cycling through completions
+Tab: complete
+"\e[Z": menu-complete
+
+set editing-mode vi
+$if mode=vi
+   set show-mode-in-prompt on
+
+   $if term=linux
+      set vi-ins-mode-string \1\e[?0c\2
+      set vi-cmd-mode-string \1\e[?8c\2
+   $else
+      set vi-ins-mode-string \1\e[6 q\2
+      set vi-cmd-mode-string \1\e[2 q\2
+   $endif
+
+   set keymap vi-command
+   # These are for vi-command mode
+   Control-l: clear-screen
+   j: history-search-forward
+   k: history-search-backward
+
+   set keymap vi-insert
+   # These are for vi-insert mode
+   Control-p: previous-history
+   Control-n: next-history
+   Control-l: clear-screen
+   Control-a: beginning-of-line
+   Control-e: end-of-line
+   # 'kj' enters normal mode
+   "kj": vi-movement-mode
+   # Switch to block cursor before executing a command
+   RETURN: "\e\n"
+$endif
